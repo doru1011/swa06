@@ -3,15 +3,15 @@ package de.shop.artikelverwaltung.domain;
 
 public class Artikel {
 
-	public Artikel(long id, String bezeichnung, int anzahl, double preis) {
+	public Artikel(long id, String name, int anzahl, double preis) {
 		super();
 		this.id = id;
-		this.bezeichnung = bezeichnung;
+		this.name = name;
 		this.anzahl = anzahl;
 		this.preis = preis;
 	}
 	private long id;
-	private String bezeichnung;
+	private String name;
 	private int anzahl;
 	private double preis;
 	public enum Kategorie
@@ -25,11 +25,11 @@ public class Artikel {
 	public void setId(long id) {
 		this.id = id;
 	}
-	public String getBezeichnung() {
-		return bezeichnung;
+	public String getName() {
+		return name;
 	}
-	public void setBezeichnung(String bezeichnung) {
-		this.bezeichnung = bezeichnung;
+	public void setName(String name) {
+		this.name = name;
 	}
 	public int getAnzahl() {
 		return anzahl;
@@ -49,7 +49,7 @@ public class Artikel {
 		int result = 1;
 		result = prime * result + anzahl;
 		result = prime * result
-				+ ((bezeichnung == null) ? 0 : bezeichnung.hashCode());
+				+ ((name == null) ? 0 : name.hashCode());
 		result = prime * result + (int) (id ^ (id >>> 32));
 		long temp;
 		temp = Double.doubleToLongBits(preis);
@@ -67,10 +67,10 @@ public class Artikel {
 		Artikel other = (Artikel) obj;
 		if (anzahl != other.anzahl)
 			return false;
-		if (bezeichnung == null) {
-			if (other.bezeichnung != null)
+		if (name == null) {
+			if (other.name != null)
 				return false;
-		} else if (!bezeichnung.equals(other.bezeichnung))
+		} else if (!name.equals(other.name))
 			return false;
 		if (id != other.id)
 			return false;
@@ -81,7 +81,7 @@ public class Artikel {
 	}
 	@Override
 	public String toString() {
-		return "Artikel [id=" + id + ", bezeichnung=" + bezeichnung
+		return "Artikel [id=" + id + ", name=" + name
 				+ ", anzahl=" + anzahl + ", preis=" + preis + "]";
 	}
 
