@@ -25,10 +25,9 @@ public class Artikel {
 	{
 		Bett, Schrank, Tisch, Stuhl, Regal, Deko
 	}
-	
 	@JsonIgnore
 	private List<Bestellung> bestellungen;
-	private URI bestellungenUri; //TODO bestellung URI
+	private URI bestellungenUri;
 	
 	public long getId() {
 		return id;
@@ -54,6 +53,19 @@ public class Artikel {
 	public void setPreis(double preis) {
 		this.preis = preis;
 	}
+	public List<Bestellung> getBestellungen() {
+		return bestellungen;
+	}
+	public void setBestellungen(List<Bestellung> bestellungen) {
+		this.bestellungen = bestellungen;
+	}
+	public URI getBestellungenUri() {
+		return bestellungenUri;
+	}
+	public void setBestellungenUri(URI bestellungenUri) {
+		this.bestellungenUri = bestellungenUri;
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -95,5 +107,5 @@ public class Artikel {
 		return "Artikel [id=" + id + ", name=" + name
 				+ ", anzahl=" + anzahl + ", preis=" + preis + "]";
 	}
-
+	
 }

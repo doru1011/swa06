@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import de.shop.artikelverwaltung.domain.Artikel;
 import de.shop.bestellverwaltung.domain.Bestellung;
 import de.shop.kundenverwaltung.domain.AbstractKunde;
 import de.shop.kundenverwaltung.domain.Adresse;
@@ -20,6 +21,7 @@ public final class Mock {
 	private static final int MAX_ID = 99;
 	private static final int MAX_KUNDEN = 8;
 	private static final int MAX_BESTELLUNGEN = 4;
+	private static final int MAX_ARTIKEL = 100;
 
 	public static AbstractKunde findKundeById(Long id) {
 		if (id > MAX_ID) {
@@ -122,6 +124,63 @@ public final class Mock {
 
 	public static void deleteKunde(Long kundeId) {
 		System.out.println("Kunde mit ID=" + kundeId + " geloescht");
+	}
+	
+	public static Collection<Artikel> findAllArtikel() {
+		final int anzahl = MAX_ARTIKEL;
+		final Collection<Artikel> artikelliste = new ArrayList<>(anzahl);
+		for (int i = 1; i <= anzahl; i++) {
+			final Artikel artikel = findArtikelById(Long.valueOf(i));
+			artikelliste.add(artikel);			
+		}
+		return artikelliste;
+	}
+	
+	public static Artikel findArtikelById(Long id) {
+		
+			if (id > MAX_ID) {
+				return null;
+			}
+			
+			final Artikel artikel = new Artikel(id, null, 0, id); 
+			artikel.setId(id);
+			artikel.setName("Name" + id);
+			artikel.setAnzahl(1);
+			artikel.setPreis(20.00 + id);
+			
+			
+			
+			
+		return artikel;
+	}
+
+	public static Collection<Artikel> findArtikelByName(String name) {
+		final int anzahl = name.length();
+		final Collection<Artikel> artikelliste = new ArrayList<>(anzahl);
+		for (int i = 1; i <= anzahl; i++) {
+			final Artikel artikel = findArtikelById(Long.valueOf(i));
+			artikel.setName(name);
+			artikelliste.add(artikel);			
+		}
+		return artikelliste;
+	}
+	
+	public static Artikel createArtikel(Artikel artikel) {
+		// Neue IDs fuer Artikel
+		final String name = artikel.getName();
+		artikel.setId(Long.valueOf(name.length()));
+		//final double preis = artikel.getPreis(); //TODO preis und ausgabe von double
+		System.out.println("Neuer Artikel: " + artikel);
+		
+		return artikel;
+	}
+	
+	public static void updateArtikel(Artikel artikel) {
+		System.out.println("Aktualisierter Artikel: " + artikel);
+	}
+
+	public static void deleteArtikel(Long artikelId) {
+		System.out.println("Artikel mit ID=" + artikelId + " geloescht");
 	}
 
 	private Mock() { /**/ }

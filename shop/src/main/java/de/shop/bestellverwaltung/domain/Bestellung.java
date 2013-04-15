@@ -2,9 +2,11 @@ package de.shop.bestellverwaltung.domain;
 
 import java.io.Serializable;
 import java.net.URI;
+import java.util.List;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 
+import de.shop.artikelverwaltung.domain.Artikel;
 import de.shop.kundenverwaltung.domain.AbstractKunde;
 
 public class Bestellung implements Serializable {
@@ -15,6 +17,8 @@ public class Bestellung implements Serializable {
 	@JsonIgnore
 	private AbstractKunde kunde;
 	private URI kundeUri;
+	private List<Artikel> artikelliste;
+	private URI artikellisteUri;
 	
 	public Long getId() {
 		return id;
@@ -69,5 +73,17 @@ public class Bestellung implements Serializable {
 	@Override
 	public String toString() {
 		return "Bestellung [id=" + id + ", ausgeliefert=" + ausgeliefert + ", kundeUri=" + kundeUri + "]";
+	}
+	public List<Artikel> getArtikelliste() {
+		return artikelliste;
+	}
+	public void setArtikelliste(List<Artikel> artikelliste) {
+		this.artikelliste = artikelliste;
+	}
+	public URI getArtikellisteUri() {
+		return artikellisteUri;
+	}
+	public void setArtikellisteUri(URI artikellisteUri) {
+		this.artikellisteUri = artikellisteUri;
 	}
 }

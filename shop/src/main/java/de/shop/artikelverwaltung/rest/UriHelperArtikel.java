@@ -21,14 +21,15 @@ public class UriHelperArtikel {
 		return artikelUri;
 	}
 	
-	public void updateUriKunde(Artikel artikel, UriInfo uriInfo) {
+	public void updateUriArtikel(Artikel artikel, UriInfo uriInfo) {
 		// URL fuer Bestellungen setzen
 		final UriBuilder ub = uriInfo.getBaseUriBuilder()
                                      .path(ArtikelResource.class)
-                                     .path(ArtikelResource.class, "findBestellungenByKundeId");
-		final URI bestellungenUri = ub.build(artikel.getId());//TODO
-		//artikel.setBestellungenUri(bestellungenUri);
+                                     .path(ArtikelResource.class, "findArtikelByArtikelId");
+		final URI artikelUri = ub.build(artikel.getId());
+		artikel.setBestellungenUri(artikelUri);
 	}
+
 }
 
 	

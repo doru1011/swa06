@@ -91,9 +91,9 @@ public class ArtikelResource {
 			}
 		}
 		
-		for (Artikel artikel : artikel) {
-			uriHelperArtikel.updateUriArtikel(artikel, uriInfo);
-		}
+		//for (Artikel artikel : artikel) {
+		//	uriHelperArtikel.updateUriArtikel(artikel, uriInfo);
+		//}
 		
 		return artikel;
 	}
@@ -107,7 +107,7 @@ public class ArtikelResource {
 		
 		// TODO Anwendungskern statt Mock, Verwendung von Locale
 		artikel = Mock.createArtikel(artikel);
-		final URI kundeUri = uriHelperArtikel.getUriArtikel(artikel, uriInfo);
+		final URI artikelUri = uriHelperArtikel.getUriArtikel(artikel, uriInfo);
 		return Response.created(artikelUri).build();
 	}
 	
