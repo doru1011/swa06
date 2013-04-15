@@ -7,6 +7,8 @@ import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
 import de.shop.artikelverwaltung.domain.Artikel;
+import de.shop.artikelverwaltung.rest.ArtikelResource;
+
 
 
 @ApplicationScoped
@@ -19,5 +21,15 @@ public class UriHelperArtikel {
 		return artikelUri;
 	}
 	
-	
+	public void updateUriKunde(Artikel artikel, UriInfo uriInfo) {
+		// URL fuer Bestellungen setzen
+		final UriBuilder ub = uriInfo.getBaseUriBuilder()
+                                     .path(ArtikelResource.class)
+                                     .path(ArtikelResource.class, "findBestellungenByKundeId");
+		final URI bestellungenUri = ub.build(artikel.getId());//TODO
+		//artikel.setBestellungenUri(bestellungenUri);
+	}
 }
+
+	
+	

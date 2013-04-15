@@ -1,5 +1,12 @@
 package de.shop.artikelverwaltung.domain;
 
+import java.net.URI;
+import java.util.List;
+
+import org.codehaus.jackson.annotate.JsonIgnore;
+
+import de.shop.bestellverwaltung.domain.Bestellung;
+
 
 public class Artikel {
 
@@ -18,6 +25,10 @@ public class Artikel {
 	{
 		Bett, Schrank, Tisch, Stuhl, Regal, Deko
 	}
+	
+	@JsonIgnore
+	private List<Bestellung> bestellungen;
+	private URI bestellungenUri; //TODO bestellung URI
 	
 	public long getId() {
 		return id;
