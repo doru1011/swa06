@@ -2,12 +2,14 @@ package de.shop.bestellverwaltung.domain;
 
 import java.io.Serializable;
 import java.net.URI;
-import java.util.List;
+
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 
-import de.shop.artikelverwaltung.domain.Artikel;
 import de.shop.kundenverwaltung.domain.AbstractKunde;
+
+import de.shop.artikelverwaltung.domain.Artikel;
+import java.util.Collection;
 
 public class Bestellung implements Serializable {
 	private static final long serialVersionUID = 1618359234119003714L;
@@ -17,8 +19,32 @@ public class Bestellung implements Serializable {
 	@JsonIgnore
 	private AbstractKunde kunde;
 	private URI kundeUri;
-	private List<Artikel> artikelliste;
-	private URI artikellisteUri;
+	
+	
+	//Anfang JP Code
+	@JsonIgnore
+	private Collection<Artikel> artikeln;
+	private URI artikelnUri;
+	
+	public URI getArtikelnUri() {
+		return artikelnUri;
+	}
+	public void setArtikelnUri(URI artikelnUri) {
+		this.artikelnUri = artikelnUri;
+	}
+
+	
+	public Collection<Artikel> getArtikeln() {
+		return artikeln;
+	}
+	public void setArtikeln(Collection<Artikel> artikeln) {
+		this.artikeln = artikeln;
+	}
+	
+	// Ende JP Code
+	
+	
+	
 	
 	public Long getId() {
 		return id;
@@ -72,18 +98,6 @@ public class Bestellung implements Serializable {
 	
 	@Override
 	public String toString() {
-		return "Bestellung [id=" + id + ", ausgeliefert=" + ausgeliefert + ", kundeUri=" + kundeUri + "]";
-	}
-	public List<Artikel> getArtikelliste() {
-		return artikelliste;
-	}
-	public void setArtikelliste(List<Artikel> artikelliste) {
-		this.artikelliste = artikelliste;
-	}
-	public URI getArtikellisteUri() {
-		return artikellisteUri;
-	}
-	public void setArtikellisteUri(URI artikellisteUri) {
-		this.artikellisteUri = artikellisteUri;
+		return "Bestellung [id=" + id + ", ausgeliefert=" + ausgeliefert + ", kundeUri=" + kundeUri + ", artikelnUri=" + artikelnUri + "]";
 	}
 }

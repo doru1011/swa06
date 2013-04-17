@@ -1,50 +1,69 @@
 package de.shop.artikelverwaltung.domain;
 
-import java.net.URI;
-import java.util.List;
+import java.io.Serializable;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
-
-import de.shop.bestellverwaltung.domain.Bestellung;
-
-
-public class Artikel {
-
-	public Artikel(long id, String name, int anzahl, double preis) {
-		super();
-		this.id = id;
-		this.name = name;
-		this.anzahl = anzahl;
-		this.preis = preis;
-	}
-	private long id;
-	private String name;
-	private int anzahl;
-	private double preis;
-	public enum Kategorie {
-		Bett, Schrank, Tisch, Stuhl, Regal, Deko
-	}
-	@JsonIgnore
-	private List<Bestellung> bestellungen;
-	private URI bestellungenUri;
+public class Artikel implements Serializable {
+	private static final long serialVersionUID = 1472129607838538329L;
 	
-	public long getId() {
+	// TODO Bean Validation
+	private Long id;
+	
+	// TODO Bean Validation
+	private String bezeichnung;
+	
+	private Kategorie kategorie;
+	private int laenge; //in mm
+	private int breite;
+	private int hoehe;
+	private double gewicht; //in KG
+	private double preis;
+	private boolean verfuegbarkeit;
+	
+	public Long getId() {
 		return id;
 	}
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
-	public String getName() {
-		return name;
+	public String getBezeichnung() {
+		return bezeichnung;
 	}
-	public void setName(String name) {
-		this.name = name;
+	public void setBezeichnung(String bezeichnung) {
+		this.bezeichnung = bezeichnung;
 	}
-	public int getAnzahl() {
-		return anzahl;
+	
+	
+	public Kategorie getKategorie() {
+		return kategorie;
 	}
-	public void setAnzahl(int anzahl) {
-		this.anzahl = anzahl;
+	public void setKategorie(Kategorie kategorie) {
+		this.kategorie = kategorie;
+	}
+	
+	
+	public int getLaenge() {
+		return laenge;
+	}
+	public void setLaenge(int laenge) {
+		this.laenge = laenge;
+	}
+	public int getBreite() {
+		return breite;
+	}
+	public void setBreite(int breite) {
+		this.breite = breite;
+	}
+	public int getHoehe() {
+		return hoehe;
+	}
+	public void setHoehe(int hoehe) {
+		this.hoehe = hoehe;
+	}
+	public double getGewicht() {
+		return gewicht;
+	}
+	public void setGewicht(double gewicht) {
+		this.gewicht = gewicht;
 	}
 	public double getPreis() {
 		return preis;
@@ -52,30 +71,30 @@ public class Artikel {
 	public void setPreis(double preis) {
 		this.preis = preis;
 	}
-	public List<Bestellung> getBestellungen() {
-		return bestellungen;
+	public boolean isVerfuegbarkeit() {
+		return verfuegbarkeit;
 	}
-	public void setBestellungen(List<Bestellung> bestellungen) {
-		this.bestellungen = bestellungen;
+	public void setVerfuegbarkeit(boolean verfuegbarkeit) {
+		this.verfuegbarkeit = verfuegbarkeit;
 	}
-	public URI getBestellungenUri() {
-		return bestellungenUri;
-	}
-	public void setBestellungenUri(URI bestellungenUri) {
-		this.bestellungenUri = bestellungenUri;
-	}
+	
+	//Nicht auf Preis und verfugbarkeit
 	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + anzahl;
 		result = prime * result
-				+ ((name == null) ? 0 : name.hashCode());
-		result = prime * result + (int) (id ^ (id >>> 32));
+				+ ((bezeichnung == null) ? 0 : bezeichnung.hashCode());
+		result = prime * result + breite;
 		long temp;
-		temp = Double.doubleToLongBits(preis);
+		temp = Double.doubleToLongBits(gewicht);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
+		result = prime * result + hoehe;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result
+				+ ((kategorie == null) ? 0 : kategorie.hashCode());
+		result = prime * result + laenge;
 		return result;
 	}
 	@Override
@@ -86,26 +105,50 @@ public class Artikel {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		final Artikel other = (Artikel) obj;
-		if (anzahl != other.anzahl)
-			return false;
-		if (name == null) {
-			if (other.name != null)
+		Artikel other = (Artikel) obj;
+		if (bezeichnung == null) {
+			if (other.bezeichnung != null)
 				return false;
-		}
-		else if (!name.equals(other.name))
+		} else if (!bezeichnung.equals(other.bezeichnung))
 			return false;
-		if (id != other.id)
+		if (breite != other.breite)
 			return false;
-		if (Double.doubleToLongBits(preis) != Double
-				.doubleToLongBits(other.preis))
+		if (Double.doubleToLongBits(gewicht) != Double
+				.doubleToLongBits(other.gewicht))
+			return false;
+		if (hoehe != other.hoehe)
+			return false;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		if (kategorie == null) {
+			if (other.kategorie != null)
+				return false;
+		} else if (!kategorie.equals(other.kategorie))
+			return false;
+			
+		if (laenge != other.laenge)
 			return false;
 		return true;
 	}
+	
+	
 	@Override
 	public String toString() {
-		return "Artikel [id=" + id + ", name=" + name
-				+ ", anzahl=" + anzahl + ", preis=" + preis + "]";
+		return "Artikel [id=" + id + ", bezeichnung=" + bezeichnung
+				+ ", laenge=" + laenge
+				+ ", breite=" + breite + ", hoehe=" + hoehe + ", gewicht="
+				+ gewicht + ", preis=" + preis + ", verfuegbarkeit="
+				+ verfuegbarkeit + ",Kategorie="+kategorie+ "]";
 	}
 	
+	
+	
+	
+	
+	
 }
+	
+	

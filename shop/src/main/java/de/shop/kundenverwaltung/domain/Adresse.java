@@ -55,7 +55,7 @@ public class Adresse implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		final Adresse other = (Adresse) obj;
+		Adresse other = (Adresse) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;

@@ -58,6 +58,9 @@ public class KundeResource {
 		return "1.0";
 	}
 	
+	
+	//Get Methode die Sucht eine kunde, aber Mock erstellt einen fur uns
+	//Mock.findKundebyId(id)
 	@GET
 	@Path("{id:[1-9][0-9]*}")
 	public AbstractKunde findKundeById(@PathParam("id") Long id) {
@@ -75,6 +78,8 @@ public class KundeResource {
 		return kunde;
 	}
 	
+	
+	//Ist es get rest/kunden ? 
 	@GET
 	public Collection<AbstractKunde> findKundenByNachname(@QueryParam("nachname") @DefaultValue("") String nachname) {
 		@SuppressWarnings("unused")
@@ -123,6 +128,10 @@ public class KundeResource {
 		return bestellungen;
 	}
 	
+	
+	
+	//Fuhlt infos von Kunde
+	//Modifiziert was ich gekriegt habe
 	@POST
 	@Consumes(APPLICATION_JSON)
 	@Produces
@@ -136,6 +145,8 @@ public class KundeResource {
 		return Response.created(kundeUri).build();
 	}
 	
+	
+	//Update -> Hochladen
 	@PUT
 	@Consumes(APPLICATION_JSON)
 	@Produces

@@ -6,13 +6,21 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+//Anfang Code JP
 import de.shop.artikelverwaltung.domain.Artikel;
+import de.shop.artikelverwaltung.domain.Kategorie;
+//Ende Code JP
+
 import de.shop.bestellverwaltung.domain.Bestellung;
 import de.shop.kundenverwaltung.domain.AbstractKunde;
 import de.shop.kundenverwaltung.domain.Adresse;
 import de.shop.kundenverwaltung.domain.Firmenkunde;
 import de.shop.kundenverwaltung.domain.HobbyType;
 import de.shop.kundenverwaltung.domain.Privatkunde;
+
+
+
+
 
 /**
  * Emulation des Anwendungskerns
@@ -21,8 +29,12 @@ public final class Mock {
 	private static final int MAX_ID = 99;
 	private static final int MAX_KUNDEN = 8;
 	private static final int MAX_BESTELLUNGEN = 4;
-	private static final int MAX_ARTIKEL = 100;
+	
+	//JP
+	private static final int MAX_ARTIKELN = 8;
+	private static final long TEST_ID = 7;
 
+	//Erstellt einen neue Kunde
 	public static AbstractKunde findKundeById(Long id) {
 		if (id > MAX_ID) {
 			return null;
@@ -72,7 +84,68 @@ public final class Mock {
 		return kunden;
 	}
 	
+	
+	public static Collection<Artikel> findAllArtikeln() {
+		final int anzahl = MAX_ARTIKELN;
+		final Collection<Artikel> artikeln = new ArrayList<>(anzahl);
+		for (int i = 1; i <= anzahl; i++) {
+			final Artikel artikel = findArtikelById(Long.valueOf(i));
+			artikeln.add(artikel);			
+		}
+		return artikeln;
+	}
+	
+	
+	//Anfang JP
+	public static Artikel findArtikelById(Long artikelid){
+		if (artikelid> MAX_ARTIKELN)
+			return null;	
+		
+		
+		final Artikel artikel = new Artikel();
+		artikel.setId(artikelid);
+		artikel.setBezeichnung("blabla Artikel Beschreibung");
+		artikel.setBreite(12);
+		artikel.setHoehe(67);
+		artikel.setGewicht(3.2);		
+		artikel.setLaenge(22);
+		artikel.setPreis(23.7);
+		artikel.setVerfuegbarkeit(true);
+		
+		//Noch nicht verlangt
+		final Kategorie kategorie = new Kategorie();
+		kategorie.setId(1);
+		kategorie.setBeschreibung("Holz Moebeln");
+		
+		
+		artikel.setKategorie(kategorie);
+		
+		return artikel;
+		
+		
+	}
+	
+	public static Collection<Artikel> findArtikelnByBestellungId (Long bestellungid)
+	{
+		final Bestellung bestellung = findBestellungById(bestellungid);
+		
+		final int anzahl = bestellungid.intValue() % MAX_ARTIKELN + 1;  // 1, 2, 3 oder 4 Bestellungen
+		final List<Artikel> artikeln = new ArrayList<>(anzahl);
+		for (int i = 1; i <= anzahl; i++) {
+			final Artikel artikel = findArtikelById(Long.valueOf(i));
+			//bestellung.setKunde(kunde);
+			artikeln.add(artikel);			
+		}
+		bestellung.setArtikeln(artikeln);
+		
+		return artikeln;
+		
+	}
+	
+	//Ende Code JP
+	
 
+	//Macht ein Liste von fake bestellungen , und korigiert , sagt dass es zum richtigen Kunden gehort
 	public static Collection<Bestellung> findBestellungenByKundeId(Long kundeId) {
 		final AbstractKunde kunde = findKundeById(kundeId);
 		
@@ -89,11 +162,15 @@ public final class Mock {
 		return bestellungen;
 	}
 
+	//Anfang JP
+	//WTF ? keine echte Beziehungen ? Wir bekommen eine List von Artikeln mit
 	public static Bestellung findBestellungById(Long id) {
 		if (id > MAX_ID) {
 			return null;
 		}
-
+		//Random ?
+		
+		
 		final AbstractKunde kunde = findKundeById(id + 1);  // andere ID fuer den Kunden
 
 		final Bestellung bestellung = new Bestellung();
@@ -101,9 +178,28 @@ public final class Mock {
 		bestellung.setAusgeliefert(false);
 		bestellung.setKunde(kunde);
 		
+		
+		
+		//Random Generation
+		int lower = 1;
+		int higher = 5;
+		int randomartikelanzahl = (int)(Math.random() * (higher - lower)) + lower;
+		//Ende Random
+		final List<Artikel> artikeln = new ArrayList<>(randomartikelanzahl);
+		
+		for (int i=1; i<randomartikelanzahl;i++){
+			
+			final Artikel artikel = findArtikelById(Long.valueOf(i));
+			artikeln.add(artikel);
+		}
+		
 		return bestellung;
 	}
+	
+	//Ende JP
 
+	//Wahrscheinlich gibt es schon eine name oder kunde ?
+	//ES fuhlt hier nur die infos
 	public static AbstractKunde createKunde(AbstractKunde kunde) {
 		// Neue IDs fuer Kunde und zugehoerige Adresse
 		// Ein neuer Kunde hat auch keine Bestellungen
@@ -126,62 +222,41 @@ public final class Mock {
 		System.out.println("Kunde mit ID=" + kundeId + " geloescht");
 	}
 	
-	public static Collection<Artikel> findAllArtikel() {
-		final int anzahl = MAX_ARTIKEL;
-		final Collection<Artikel> artikelliste = new ArrayList<>(anzahl);
-		for (int i = 1; i <= anzahl; i++) {
-			final Artikel artikel = findArtikelById(Long.valueOf(i));
-			artikelliste.add(artikel);			
-		}
-		return artikelliste;
-	}
-	
-	public static Artikel findArtikelById(Long id) {
-		
-			if (id > MAX_ID) {
-				return null;
-			}
-			
-			final Artikel artikel = new Artikel(id, null, 0, id); 
-			artikel.setId(id);
-			artikel.setName("Name" + id);
-			artikel.setAnzahl(1);
-			artikel.setPreis(id);
-			
-			
-			
-			
-		return artikel;
-	}
-
-	public static Collection<Artikel> findArtikelByName(String name) {
-		final int anzahl = name.length();
-		final Collection<Artikel> artikelliste = new ArrayList<>(anzahl);
-		for (int i = 1; i <= anzahl; i++) {
-			final Artikel artikel = findArtikelById(Long.valueOf(i));
-			artikel.setName(name);
-			artikelliste.add(artikel);			
-		}
-		return artikelliste;
-	}
-	
-	public static Artikel createArtikel(Artikel artikel) {
-		// Neue IDs fuer Artikel
-		final String name = artikel.getName();
-		artikel.setId(Long.valueOf(name.length()));
-		//final double preis = artikel.getPreis(); //TODO preis und ausgabe von double
-		System.out.println("Neuer Artikel: " + artikel);
-		
-		return artikel;
-	}
-	
 	public static void updateArtikel(Artikel artikel) {
-		System.out.println("Aktualisierter Artikel: " + artikel);
-	}
-
-	public static void deleteArtikel(Long artikelId) {
-		System.out.println("Artikel mit ID=" + artikelId + " geloescht");
+		// TODO Auto-generated method stub
+		System.out.println("Aktualisierter artikel: " + artikel);
+		
 	}
 
 	private Mock() { /**/ }
+
+	public static Artikel createArtikel(Artikel artikel) {
+		System.out.println("Neuer artikel: in progress");
+		//final String bezeichnung = artikel.getBezeichnung();
+		artikel.setId(TEST_ID);
+		
+		final Kategorie kategorie = artikel.getKategorie();
+		final String bechreibung = kategorie.getBeschreibung();
+		
+		kategorie.setId(TEST_ID);		
+		artikel.setKategorie(kategorie);		
+		System.out.println("Neuer artikel: " + artikel);	
+		
+		return artikel;
+		
+		
+	}
+	
+	public static Bestellung createBestellung(Bestellung bestellung) {
+
+		bestellung.setId(TEST_ID);
+		bestellung.setAusgeliefert(false);
+
+		System.out.println("Neue Bestellung: " + bestellung);
+		return bestellung;
+		}
+
+	
+
+	
 }
