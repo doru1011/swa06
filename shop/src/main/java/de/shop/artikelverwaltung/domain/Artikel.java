@@ -21,7 +21,7 @@ public class Artikel {
 	private String name;
 	private int anzahl;
 	private double preis;
-	public enum Kategorie{
+	public enum Kategorie {
 		Bett, Schrank, Tisch, Stuhl, Regal, Deko
 	}
 	@JsonIgnore
