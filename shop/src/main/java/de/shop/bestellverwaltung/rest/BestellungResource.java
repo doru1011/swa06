@@ -43,7 +43,8 @@ public class BestellungResource {
 	private UriHelperBestellung uriHelperBestellung;
 	
 		//Anfang JP	Warum gibt es hier eine Bemerkung ?
-		@Inject UriHelperArtikel uriHelperArtikel;
+		@Inject 
+		private UriHelperArtikel uriHelperArtikel;
 		//Ende JP
 	
 	

@@ -105,11 +105,12 @@ public class Artikel implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Artikel other = (Artikel) obj;
+		final Artikel other = (Artikel) obj;
 		if (bezeichnung == null) {
 			if (other.bezeichnung != null)
 				return false;
-		} else if (!bezeichnung.equals(other.bezeichnung))
+		}
+		else if (!bezeichnung.equals(other.bezeichnung))
 			return false;
 		if (breite != other.breite)
 			return false;
@@ -121,12 +122,14 @@ public class Artikel implements Serializable {
 		if (id == null) {
 			if (other.id != null)
 				return false;
-		} else if (!id.equals(other.id))
+		}
+		else if (!id.equals(other.id))
 			return false;
 		if (kategorie == null) {
 			if (other.kategorie != null)
 				return false;
-		} else if (!kategorie.equals(other.kategorie))
+		} 
+		else if (!kategorie.equals(other.kategorie))
 			return false;
 			
 		if (laenge != other.laenge)
@@ -141,14 +144,8 @@ public class Artikel implements Serializable {
 				+ ", laenge=" + laenge
 				+ ", breite=" + breite + ", hoehe=" + hoehe + ", gewicht="
 				+ gewicht + ", preis=" + preis + ", verfuegbarkeit="
-				+ verfuegbarkeit + ",Kategorie="+kategorie+ "]";
-	}
-	
-	
-	
-	
-	
-	
+				+ verfuegbarkeit + ",Kategorie=" + kategorie + "]";
+	}	
 }
 	
 	

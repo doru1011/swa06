@@ -1,8 +1,8 @@
 package de.shop.artikelverwaltung.domain;
 
-import java.io.Serializable;
+//import java.io.Serializable;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
+//import org.codehaus.jackson.annotate.JsonIgnore;
 
 public class Kategorie {
 	private static final long serialVersionUID = -3029272617931844501L;
@@ -45,16 +45,18 @@ public class Kategorie {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Kategorie other = (Kategorie) obj;
+		final Kategorie other = (Kategorie) obj;
 		if (beschreibung == null) {
 			if (other.beschreibung != null)
 				return false;
-		} else if (!beschreibung.equals(other.beschreibung))
+		} 
+		else if (!beschreibung.equals(other.beschreibung))
 			return false;
 		if (id == null) {
 			if (other.id != null)
 				return false;
-		} else if (!id.equals(other.id))
+		} 
+		else if (!id.equals(other.id))
 			return false;
 		return true;
 	}

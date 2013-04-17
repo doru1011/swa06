@@ -97,20 +97,27 @@ public final class Mock {
 	
 	
 	//Anfang JP
-	public static Artikel findArtikelById(Long artikelid){
-		if (artikelid> MAX_ARTIKELN)
+	public static Artikel findArtikelById(Long artikelid) {
+		if (artikelid > MAX_ARTIKELN)
 			return null;	
+		
+		final int breiteTmp = 12;
+		final int hoeheTmp = 67;
+		final double gewichtTmp = 3.2;
+		final int laengeTmp = 22;
+		final double preisTmp = 23.7;
+		final boolean verfuegbarkeitTmp = true;
 		
 		
 		final Artikel artikel = new Artikel();
 		artikel.setId(artikelid);
 		artikel.setBezeichnung("blabla Artikel Beschreibung");
-		artikel.setBreite(12);
-		artikel.setHoehe(67);
-		artikel.setGewicht(3.2);		
-		artikel.setLaenge(22);
-		artikel.setPreis(23.7);
-		artikel.setVerfuegbarkeit(true);
+		artikel.setBreite(breiteTmp);
+		artikel.setHoehe(hoeheTmp);
+		artikel.setGewicht(gewichtTmp);		
+		artikel.setLaenge(laengeTmp);
+		artikel.setPreis(preisTmp);
+		artikel.setVerfuegbarkeit(verfuegbarkeitTmp);
 		
 		//Noch nicht verlangt
 		final Kategorie kategorie = new Kategorie();
@@ -125,7 +132,7 @@ public final class Mock {
 		
 	}
 	
-	public static Collection<Artikel> findArtikelnByBestellungId (Long bestellungid)
+	public static Collection<Artikel> findArtikelnByBestellungId(Long bestellungid)
 	{
 		final Bestellung bestellung = findBestellungById(bestellungid);
 		
@@ -181,13 +188,13 @@ public final class Mock {
 		
 		
 		//Random Generation
-		int lower = 1;
-		int higher = 5;
-		int randomartikelanzahl = (int)(Math.random() * (higher - lower)) + lower;
+		final int lower = 1;
+		final int higher = 5;
+		final int randomartikelanzahl = (int) (Math.random() * (higher - lower)) + lower;
 		//Ende Random
 		final List<Artikel> artikeln = new ArrayList<>(randomartikelanzahl);
 		
-		for (int i=1; i<randomartikelanzahl;i++){
+		for (int i = 1; i < randomartikelanzahl; i++) {
 			
 			final Artikel artikel = findArtikelById(Long.valueOf(i));
 			artikeln.add(artikel);

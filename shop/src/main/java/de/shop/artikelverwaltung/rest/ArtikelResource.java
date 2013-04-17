@@ -12,7 +12,7 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
+//import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -25,8 +25,8 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import de.shop.artikelverwaltung.domain.Artikel;
-import de.shop.bestellverwaltung.domain.Bestellung;
-import de.shop.kundenverwaltung.domain.AbstractKunde;
+//import de.shop.bestellverwaltung.domain.Bestellung;
+//import de.shop.kundenverwaltung.domain.AbstractKunde;
 import de.shop.util.LocaleHelper;
 import de.shop.util.Mock;
 import de.shop.util.NotFoundException;
@@ -56,7 +56,7 @@ public class ArtikelResource {
 	}
 	
 	@GET
-	public Collection<Artikel> findArtikeln(){
+	public Collection<Artikel> findArtikeln() {
 		final Collection<Artikel> artikeln = Mock.findAllArtikeln();
 		return artikeln;		
 	}
