@@ -146,7 +146,7 @@ public final class Mock {
 			artikel.setId(id);
 			artikel.setName("Name" + id);
 			artikel.setAnzahl(1);
-			artikel.setPreis(20.00 + id);
+			artikel.setPreis(id);
 			
 			
 			

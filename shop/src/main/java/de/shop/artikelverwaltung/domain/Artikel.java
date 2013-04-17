@@ -21,8 +21,7 @@ public class Artikel {
 	private String name;
 	private int anzahl;
 	private double preis;
-	public enum Kategorie
-	{
+	public enum Kategorie{
 		Bett, Schrank, Tisch, Stuhl, Regal, Deko
 	}
 	@JsonIgnore
@@ -87,13 +86,14 @@ public class Artikel {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Artikel other = (Artikel) obj;
+		final Artikel other = (Artikel) obj;
 		if (anzahl != other.anzahl)
 			return false;
 		if (name == null) {
 			if (other.name != null)
 				return false;
-		} else if (!name.equals(other.name))
+		}
+		else if (!name.equals(other.name))
 			return false;
 		if (id != other.id)
 			return false;
