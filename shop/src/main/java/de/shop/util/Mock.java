@@ -111,7 +111,7 @@ public final class Mock {
 		
 		final Artikel artikel = new Artikel();
 		artikel.setId(artikelid);
-		artikel.setBezeichnung("blabla Artikel Beschreibung");
+		artikel.setBezeichnung("Artikel Beschreibung");
 		artikel.setBreite(breiteTmp);
 		artikel.setHoehe(hoeheTmp);
 		artikel.setGewicht(gewichtTmp);		
@@ -122,7 +122,7 @@ public final class Mock {
 		//Noch nicht verlangt
 		final Kategorie kategorie = new Kategorie();
 		kategorie.setId(1);
-		kategorie.setBeschreibung("Holz Moebeln");
+		kategorie.setBeschreibung("Tisch");
 		
 		
 		artikel.setKategorie(kategorie);

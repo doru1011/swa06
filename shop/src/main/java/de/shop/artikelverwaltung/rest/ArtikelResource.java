@@ -31,7 +31,7 @@ import de.shop.util.LocaleHelper;
 import de.shop.util.Mock;
 import de.shop.util.NotFoundException;
 
-@Path("/artikeln")
+@Path("/artikel")
 @Produces(APPLICATION_JSON)
 @Consumes
 public class ArtikelResource {
