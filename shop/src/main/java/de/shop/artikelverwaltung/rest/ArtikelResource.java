@@ -107,7 +107,7 @@ public class ArtikelResource {
 	
 	@GET
 	@Path("{id:[1-9][0-9]*}")
-	public Artikel findArtikelgById(@PathParam("id") Long id) {
+	public Artikel findArtikelById(@PathParam("id") Long id) {
 		@SuppressWarnings("unused")
 		final Locale locale = localeHelper.getLocale(headers);
 		

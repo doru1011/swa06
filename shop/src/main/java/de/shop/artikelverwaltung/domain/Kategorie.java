@@ -5,7 +5,7 @@ package de.shop.artikelverwaltung.domain;
 //import org.codehaus.jackson.annotate.JsonIgnore;
 
 public class Kategorie {
-	private static final long serialVersionUID = -3029272617931844501L;
+	//private static final long serialVersionUID = -3029272617931844501L;
 	private Object id;
 	private String beschreibung;
 	

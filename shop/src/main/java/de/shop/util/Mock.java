@@ -243,7 +243,7 @@ public final class Mock {
 		artikel.setId(TEST_ID);
 		
 		final Kategorie kategorie = artikel.getKategorie();
-		final String bechreibung = kategorie.getBeschreibung();
+		//TODO final String beschreibung = kategorie.getBeschreibung();
 		
 		kategorie.setId(TEST_ID);		
 		artikel.setKategorie(kategorie);		
