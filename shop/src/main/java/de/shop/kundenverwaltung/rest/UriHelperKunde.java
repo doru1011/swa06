@@ -7,9 +7,11 @@ import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
 import de.shop.kundenverwaltung.domain.AbstractKunde;
+import de.shop.util.Log;
 
-//on fabrique ici les url ?
+
 @ApplicationScoped
+@Log
 public class UriHelperKunde {
 	public URI getUriKunde(AbstractKunde kunde, UriInfo uriInfo) {
 		final UriBuilder ub = uriInfo.getBaseUriBuilder()
@@ -20,10 +22,6 @@ public class UriHelperKunde {
 	}
 	
 	
-	//Donne le lien pour BestellungEN
-	//gibt zmBSP 
-	//"bestellungenUri":"http://localhost:8080/shop3/rest/kunden/1/bestellungen",
-	
 	public void updateUriKunde(AbstractKunde kunde, UriInfo uriInfo) {
 		// URL fuer Bestellungen setzen
 		final UriBuilder ub = uriInfo.getBaseUriBuilder()
@@ -31,6 +29,5 @@ public class UriHelperKunde {
                                      .path(KundeResource.class, "findBestellungenByKundeId");
 		final URI bestellungenUri = ub.build(kunde.getId());
 		kunde.setBestellungenUri(bestellungenUri);
-		//kunde.setBestellungenUri("hello");
 	}
 }
