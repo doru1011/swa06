@@ -13,7 +13,7 @@ public class ArtikelServiceMock extends ArtikelService {
 	public Artikel findArtikelById(Long id) {
 		final Artikel artikel = new Artikel();
 		artikel.setId(id);
-		artikel.setBezeichnung("Bezeichnung" + id);
+		artikel.setBezeichnung("Bezeichnung_" + id + "_Mock");
 		return artikel;
 	}
 }
