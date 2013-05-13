@@ -139,7 +139,7 @@ public final class Mock {
 
 		final Bestellung bestellung = new Bestellung();
 		bestellung.setId(id);
-		bestellung.setAusgeliefert(false);
+		//bestellung.setAusgeliefert(false);
 		bestellung.setKunde(kunde);
 		
 		return bestellung;
