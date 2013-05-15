@@ -1,6 +1,7 @@
 package de.shop.util;
 
 import java.lang.invoke.MethodHandles;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -11,6 +12,8 @@ import java.util.Set;
 import org.jboss.logging.Logger;
 
 import de.shop.artikelverwaltung.domain.Artikel;
+import de.shop.artikelverwaltung.domain.ArtikelFarbeType;
+import de.shop.bestellverwaltung.domain.Bestellposition;
 import de.shop.bestellverwaltung.domain.Bestellung;
 import de.shop.kundenverwaltung.domain.AbstractKunde;
 import de.shop.kundenverwaltung.domain.Adresse;
@@ -30,6 +33,7 @@ public final class Mock {
 	private static final int JAHR = 2001;
 	private static final int MONAT = 0; // bei Calendar werden die Monate von 0 bis 11 gezaehlt
 	private static final int TAG = 31;  // bei Calendar die Monatstage ab 1 gezaehlt
+	private static final int MAX_ARTIKEL = 15;
 
 	public static AbstractKunde findKundeById(Long id) {
 		if (id > MAX_ID) {
@@ -139,8 +143,19 @@ public final class Mock {
 
 		final Bestellung bestellung = new Bestellung();
 		bestellung.setId(id);
-		//bestellung.setAusgeliefert(false);
+		bestellung.setAusgeliefert(false);
 		bestellung.setKunde(kunde);
+		final List<Bestellposition> bestellpositionen = new ArrayList<>();
+		
+		for(int i = 0; i <= 3; i++){
+			final Bestellposition bestellposition = new Bestellposition();
+			bestellposition.setAnzahl(new Long(i+2));
+			bestellposition.setArtikel(findArtikelById(new Long(i+3)));
+			bestellposition.setPositionId(new Long(i+1));
+			bestellpositionen.add(bestellposition);
+		}
+	
+		bestellung.setBestellpositionen(bestellpositionen);
 		
 		return bestellung;
 	}
@@ -167,16 +182,105 @@ public final class Mock {
 		LOGGER.infof("Geloeschter Kunde: %s", kunde);
 	}
 
-	public static Bestellung createBestellung(Bestellung bestellung, AbstractKunde kunde) {
-		LOGGER.infof("Neue Bestellung: %s fuer Kunde: %s", bestellung, kunde);
+	public static Bestellung createBestellung(Bestellung bestellung, AbstractKunde kunde, List<Bestellposition> bestellpositionen) {
+		LOGGER.infof("Neue Bestellung: %s fuer Kunde %s mit Bestellpositionen %s angelegt", bestellung, kunde, bestellpositionen);
+		final String nachname = kunde.getNachname();
+		bestellung.setId(Long.valueOf(nachname.length()));
 		return bestellung;
 	}
 
 	public static Artikel findArtikelById(Long id) {
+		if (id > MAX_ID) {
+			return null;
+		}
+		
 		final Artikel artikel = new Artikel();
+		final String bezeichnung;
+				
+		if (id % 3 == 2) {
+					bezeichnung = "Schrank Verstauviel";
+				}
+				else if (id % 3 == 1) {
+					bezeichnung = "Couch Potato";
+				}
+				else {
+					bezeichnung = "Tisch Vierbein";
+				}
+			
 		artikel.setId(id);
-		artikel.setBezeichnung("Bezeichnung_" + id);
+		artikel.setArtikelBezeichnung("" + bezeichnung);
+		artikel.setVerfuegbarkeit("verfuegbar");
+		artikel.setPreis(new BigDecimal(id));
+		final Set<ArtikelFarbeType> farben = new HashSet<>();
+		farben.add(ArtikelFarbeType.BLAU);
+		farben.add(ArtikelFarbeType.SCHWARZ);
+		farben.add(ArtikelFarbeType.WEISS);
+		artikel.setFarbe(farben);
+		
 		return artikel;
+	}
+	
+	public static List<Artikel> findArtikelByBezeichnung(String bezeichnung) {
+		final int anzahl = bezeichnung.length();
+		final List<Artikel> artikelliste = new ArrayList<>(anzahl);
+		for (int i = 1; i <= anzahl; i++) {
+			final Artikel artikel = findArtikelById(Long.valueOf(i));
+			artikel.setArtikelBezeichnung(bezeichnung);
+			artikelliste.add(artikel);			
+		}
+		return artikelliste;
+	}
+	
+	public static List<Artikel> findAllArtikel() {
+		final int anzahl = MAX_ARTIKEL;
+		final List<Artikel> artikelliste = new ArrayList<>(anzahl);
+		for (int i = 1; i <= anzahl; i++) {
+			final Artikel artikel = findArtikelById(Long.valueOf(i));
+			artikelliste.add(artikel);			
+		}
+		return artikelliste;
+	}
+
+	public static Bestellposition findBestellpositionById(Long id) {
+		if (id > MAX_ID) {
+			return null;
+		}
+		
+		
+		final Artikel artikel = findArtikelById(id); 
+		final Bestellposition bestellposition = new Bestellposition();
+		bestellposition.setAnzahl(id + 2);
+		bestellposition.setArtikel(artikel);
+		bestellposition.setPositionId(id);
+		
+		return bestellposition;
+	}
+	
+	public static Bestellposition createBestellposition(Bestellposition bestellposition, Bestellung bestellung) {
+		LOGGER.infof("Neue Bestellposition: %s fuer Bestellung: %s", bestellposition, bestellung);
+		return bestellposition;
+	}
+	
+	public static Artikel createArtikel(Artikel artikel) {
+		LOGGER.infof("Neuer Artikel: %s hinzugefuegt", artikel);
+		return artikel;
+	}
+	
+	public static void updateBestellposition(Bestellposition bestellposition) {
+		LOGGER.infof("Aktualisierte Bestellposition: %s", bestellposition);
+	}
+	
+	public static Artikel updateArtikel(Artikel artikel) {
+		LOGGER.infof("Aktualisierter Artikel: %s", artikel);
+		return artikel;
+	}
+	
+	public static void deleteBestellposition(Bestellposition bestellposition) {
+		LOGGER.infof("Geloeschte Bestellposition: %s", bestellposition);
+	}
+	
+	public static void deleteArtikel(Artikel artikel) {
+		LOGGER.infof("Geloeschter Artikel: %s", artikel);
 	}
 
 	private Mock() { /**/ }

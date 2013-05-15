@@ -12,18 +12,18 @@ import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
 import de.shop.artikelverwaltung.domain.Artikel;
-import de.shop.artikelverwaltung.service.AbstractArtikelValidationException;
+import de.shop.artikelverwaltung.service.InvalidArtikelException;
 import de.shop.util.Log;
 
 
 @Provider
 @ApplicationScoped
 @Log
-public class ArtikelValidationExceptionMapper implements ExceptionMapper<AbstractArtikelValidationException> {
+public class InvalidArtikelExceptionMapper implements ExceptionMapper<InvalidArtikelException> {
 	private static final String NEWLINE = System.getProperty("line.separator");
 
 	@Override
-	public Response toResponse(AbstractArtikelValidationException e) {
+	public Response toResponse(InvalidArtikelException e) {
 		final Collection<ConstraintViolation<Artikel>> violations = e.getViolations();
 		final StringBuilder sb = new StringBuilder();
 		for (ConstraintViolation<Artikel> v : violations) {

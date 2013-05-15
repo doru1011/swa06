@@ -12,18 +12,18 @@ import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
 import de.shop.bestellverwaltung.domain.Bestellung;
-import de.shop.bestellverwaltung.service.AbstractBestellungValidationException;
+import de.shop.bestellverwaltung.service.InvalidBestellungException;
 import de.shop.util.Log;
 
 
 @Provider
 @ApplicationScoped
 @Log
-public class BestellungValidationExceptionMapper implements ExceptionMapper<AbstractBestellungValidationException> {
+public class InvalidBestellungExceptionMapper implements ExceptionMapper<InvalidBestellungException> {
 	private static final String NEWLINE = System.getProperty("line.separator");
 
 	@Override
-	public Response toResponse(AbstractBestellungValidationException e) {
+	public Response toResponse(InvalidBestellungException e) {
 		final Collection<ConstraintViolation<Bestellung>> violations = e.getViolations();
 		final StringBuilder sb = new StringBuilder();
 		for (ConstraintViolation<Bestellung> v : violations) {

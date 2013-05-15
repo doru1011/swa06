@@ -1,5 +1,4 @@
 package de.shop.artikelverwaltung.service;
-
 import java.util.Collection;
 
 import javax.validation.ConstraintViolation;

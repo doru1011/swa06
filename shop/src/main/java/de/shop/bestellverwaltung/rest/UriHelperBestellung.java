@@ -23,17 +23,6 @@ public class UriHelperBestellung {
 		if (kunde != null) {
 			final URI kundeUri = uriHelperKunde.getUriKunde(bestellung.getKunde(), uriInfo);
 			bestellung.setKundeUri(kundeUri);
-			
-			
-			//Teil JP
-			
-			final UriBuilder ub = uriInfo.getBaseUriBuilder()
-                    				.path(BestellungResource.class)
-                   					.path(BestellungResource.class, "findArtikelnByBestellungId");
-			
-			final URI artikelUri = ub.build(bestellung.getId());
-			bestellung.setArtikelUri(artikelUri);
-			
 		}
 		
 	}

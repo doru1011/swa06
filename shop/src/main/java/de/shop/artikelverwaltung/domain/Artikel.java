@@ -3,28 +3,40 @@ package de.shop.artikelverwaltung.domain;
 import static de.shop.util.Constants.MIN_ID;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Set;
 
+import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import de.shop.util.IdGroup;
 
-public class Artikel implements Serializable {
-	private static final long serialVersionUID = 1472129607838538329L;
+public class Artikel implements Serializable  {
 	
-	public static final int BEZEICHNUNG_LENGTH_MIN = 2;
-	public static final int BEZEICHNUNG_LENGTH_MAX = 32;
+	private static final long serialVersionUID = 161835922543423714L;
 	
-	// TODO Bean Validation
+	public static final int ARTIKELBEZEICHNUNG_LENGTH_MIN = 2;
+	public static final int ARTIKELBEZEICHNUNG_LENGTH_MAX = 32;
+	
 	@Min(value = MIN_ID, message = "{artikelverwaltung.artikel.id.min}", groups = IdGroup.class)
 	private Long id;
 	
-	// TODO Bean Validation
-	@NotNull(message = "{artikelverwaltung.artikel.bezeichnung.notNull}")
-	@Size(min = BEZEICHNUNG_LENGTH_MIN, max = BEZEICHNUNG_LENGTH_MAX,
-	      message = "{artikelverwaltung.artikel.bezeichnung.length}")
-	private String bezeichnung;
+	@NotNull(message = "{artikelverwaltung.artikel.artikelbezeichnung.notNull}")
+	@Size(min = ARTIKELBEZEICHNUNG_LENGTH_MIN, max = ARTIKELBEZEICHNUNG_LENGTH_MAX,
+	      message = "{artikelverwaltung.artikel.artikelbezeichnung.length}")
+	private String artikelBezeichnung;
+	
+	@NotNull(message = "{artikelverwaltung.artikel.preis.notNull}")
+	@DecimalMin(value = "0.0", message = "{artikelverwaltung.artikel.preis.min}")
+	private BigDecimal preis;
+	
+	@NotNull(message = "{artikelverwaltung.artikel.farbe.notNull}")
+	private Set<ArtikelFarbeType> farbe;
+	
+	@NotNull(message = "{artikelverwaltung.artikel.verfuegbarkeit.notNull}")
+	private String verfuegbarkeit;
 	
 	public Long getId() {
 		return id;
@@ -32,22 +44,40 @@ public class Artikel implements Serializable {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public String getBezeichnung() {
-		return bezeichnung;
+	public String getArtikelBezeichnung() {
+		return artikelBezeichnung;
 	}
-	public void setBezeichnung(String bezeichnung) {
-		this.bezeichnung = bezeichnung;
+	public void setArtikelBezeichnung(String artikelBezeichnung) {
+		this.artikelBezeichnung = artikelBezeichnung;
 	}
-	
+	public BigDecimal getPreis() {
+		return preis;
+	}
+	public void setPreis(BigDecimal preis) {
+		this.preis = preis;
+	}
+	public Set<ArtikelFarbeType> getFarbe() {
+		return farbe;
+	}
+	public void setFarbe(Set<ArtikelFarbeType> farbe) {
+		this.farbe = farbe;
+	}
+	public String getVerfuegbarkeit() {
+		return verfuegbarkeit;
+	}
+	public void setVerfuegbarkeit(String verfuegbarkeit) {
+		this.verfuegbarkeit = verfuegbarkeit;
+	}
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result
-				+ ((bezeichnung == null) ? 0 : bezeichnung.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
-	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -56,17 +86,20 @@ public class Artikel implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		final Artikel other = (Artikel) obj;
-		if (bezeichnung == null) {
-			if (other.bezeichnung != null)
+		Artikel other = (Artikel) obj;
+		if (id == null) {
+			if (other.id != null)
 				return false;
-		} else if (!bezeichnung.equals(other.bezeichnung))
+		}
+		else if (!id.equals(other.id))
 			return false;
 		return true;
 	}
-
 	@Override
 	public String toString() {
-		return "Artikel [id=" + id + ", bezeichnung=" + bezeichnung + "]";
+		return "Artikel [id=" + id + ", artikelBezeichnung="
+				+ artikelBezeichnung + ", preis=" + preis + ", farbe=" + farbe
+				+ ", verfuegbarkeit=" + verfuegbarkeit + "]";
 	}
+	
 }
