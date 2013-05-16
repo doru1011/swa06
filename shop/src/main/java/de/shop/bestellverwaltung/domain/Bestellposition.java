@@ -75,7 +75,8 @@ public class Bestellposition implements Serializable {
 		if (anzahl == null) {
 			if (other.anzahl != null)
 				return false;
-		} else if (!anzahl.equals(other.anzahl))
+		} 
+		else if (!anzahl.equals(other.anzahl))
 			return false;
 		if (artikel == null) {
 			if (other.artikel != null)

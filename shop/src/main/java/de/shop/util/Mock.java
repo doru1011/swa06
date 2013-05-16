@@ -201,10 +201,12 @@ public final class Mock {
 		final Artikel artikel = new Artikel();
 		final String bezeichnung;
 				
-		if (id % 3 == 2) {
+		final int konstante = 3;
+		
+		if (id % konstante == 2) {
 					bezeichnung = "Schrank Verstauviel";
 				}
-				else if (id % 3 == 1) {
+				else if (id % konstante == 1) {
 					bezeichnung = "Couch Potato";
 				}
 				else {
