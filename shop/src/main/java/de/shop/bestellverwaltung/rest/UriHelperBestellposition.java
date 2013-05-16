@@ -13,8 +13,8 @@ import de.shop.bestellverwaltung.domain.Bestellposition;
 
 @ApplicationScoped
 public class UriHelperBestellposition {
-	@Inject
-	private UriHelperBestellung uriHelperBestellung;
+//	@Inject
+//	private UriHelperBestellung uriHelperBestellung;
 	
 	@Inject
 	private UriHelperArtikel uriHelperArtikel;
