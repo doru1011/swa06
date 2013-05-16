@@ -8,8 +8,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
@@ -33,16 +31,6 @@ public class ArtikelServiceImpl implements ArtikelService, Serializable {
 	
 	@Inject
 	private ValidatorProvider validatorProvider;
-	
-	@PostConstruct
-	private void postConstruct() {
-		LOGGER.debugf("CDI-faehiges Bean %s wurde erzeugt", this);
-	}
-	
-	@PreDestroy
-	private void preDestroy() {
-		LOGGER.debugf("CDI-faehiges Bean %s wird geloescht", this);
-	}
 	
 	public Artikel findArtikelById(Long artikelId, Locale locale) {
 		validateArtikelId(artikelId, locale);
