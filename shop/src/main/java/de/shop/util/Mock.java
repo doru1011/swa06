@@ -147,11 +147,13 @@ public final class Mock {
 		bestellung.setKunde(kunde);
 		final List<Bestellposition> bestellpositionen = new ArrayList<>();
 		
-		for(int i = 0; i <= 3; i++){
+		final int konstante = 3;
+		
+		for (int i = 0; i <= konstante; i++) {
 			final Bestellposition bestellposition = new Bestellposition();
-			bestellposition.setAnzahl(new Long(i+2));
-			bestellposition.setArtikel(findArtikelById(new Long(i+3)));
-			bestellposition.setPositionId(new Long(i+1));
+			bestellposition.setAnzahl(new Long(i + 2));
+			bestellposition.setArtikel(findArtikelById(new Long(i + konstante)));
+			bestellposition.setPositionId(new Long(i + 1));
 			bestellpositionen.add(bestellposition);
 		}
 	
@@ -182,8 +184,10 @@ public final class Mock {
 		LOGGER.infof("Geloeschter Kunde: %s", kunde);
 	}
 
-	public static Bestellung createBestellung(Bestellung bestellung, AbstractKunde kunde, List<Bestellposition> bestellpositionen) {
-		LOGGER.infof("Neue Bestellung: %s fuer Kunde %s mit Bestellpositionen %s angelegt", bestellung, kunde, bestellpositionen);
+	public static Bestellung createBestellung(Bestellung bestellung, AbstractKunde kunde, 
+			List<Bestellposition> bestellpositionen) {
+		LOGGER.infof("Neue Bestellung: %s fuer Kunde %s mit Bestellpositionen %s angelegt", 
+				bestellung, kunde, bestellpositionen);
 		final String nachname = kunde.getNachname();
 		bestellung.setId(Long.valueOf(nachname.length()));
 		return bestellung;

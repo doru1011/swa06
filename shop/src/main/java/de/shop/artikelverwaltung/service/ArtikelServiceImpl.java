@@ -91,7 +91,7 @@ public class ArtikelServiceImpl implements ArtikelService, Serializable {
 		validateArtikelId(artikelId, locale);
 		
 		// TODO Datenbanzugriffsschicht statt Mock
-		Artikel artikel = Mock.findArtikelById(artikelId);
+		final Artikel artikel = Mock.findArtikelById(artikelId);
 		Mock.deleteArtikel(artikel);
 		
 		return artikel;
@@ -111,7 +111,7 @@ public class ArtikelServiceImpl implements ArtikelService, Serializable {
 		final Validator validator = validatorProvider.getValidator(locale);
 		final Artikel artikel = new Artikel();
 		artikel.setId(Long.valueOf(bezeichnung.length()));
-		artikel.setVerfuegbarkeit(bezeichnung +" ist verfuegbar");
+		artikel.setVerfuegbarkeit(bezeichnung + " ist verfuegbar");
 		final Set<ArtikelFarbeType> farben = new HashSet<>();
 		farben.add(ArtikelFarbeType.BLAU);
 		farben.add(ArtikelFarbeType.SCHWARZ);
