@@ -1,14 +1,19 @@
 package de.shop.kundenverwaltung.service;
 
 import java.io.Serializable;
+import java.lang.invoke.MethodHandles;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import javax.validation.groups.Default;
+
+import org.jboss.logging.Logger;
 
 import de.shop.kundenverwaltung.domain.AbstractKunde;
 import de.shop.util.IdGroup;
@@ -19,9 +24,20 @@ import de.shop.util.ValidatorProvider;
 @Log
 public class KundeService implements Serializable {
 	private static final long serialVersionUID = 3188789767052580247L;
+	private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().lookupClass());
 	
 	@Inject
 	private ValidatorProvider validatorProvider;
+	
+	@PostConstruct
+	private void postConstruct() {
+		LOGGER.debugf("CDI-faehiges Bean %s wurde erzeugt", this);
+	}
+	
+	@PreDestroy
+	private void preDestroy() {
+		LOGGER.debugf("CDI-faehiges Bean %s wird geloescht", this);
+	}
 
 	public AbstractKunde findKundeById(Long id, Locale locale) {
 		validateKundeId(id, locale);
@@ -76,9 +92,9 @@ public class KundeService implements Serializable {
 
 		// Pruefung, ob die Email-Adresse schon existiert
 		// TODO Datenbanzugriffsschicht statt Mock
-		if (Mock.findKundeByEmail(kunde.getEmail()) != null) {
+		/*if (Mock.findKundeByEmail(kunde.getEmail()) != null) {
 			throw new EmailExistsException(kunde.getEmail());
-		}
+		}*/
 
 		kunde = Mock.createKunde(kunde);
 
@@ -103,13 +119,13 @@ public class KundeService implements Serializable {
 		// Werden alle Constraints beim Modifizieren gewahrt?
 		validateKunde(kunde, locale, Default.class, IdGroup.class);
 
-		// Pruefung, ob die Email-Adresse schon existiert
-		final AbstractKunde vorhandenerKunde = Mock.findKundeByEmail(kunde.getEmail());
-
-		// Gibt es die Email-Adresse bei einem anderen, bereits vorhandenen Kunden?
-		if (vorhandenerKunde.getId().longValue() != kunde.getId().longValue()) {
-			throw new EmailExistsException(kunde.getEmail());
-		}
+//		// Pruefung, ob die Email-Adresse schon existiert
+//		final AbstractKunde vorhandenerKunde = Mock.findKundeByEmail(kunde.getEmail());
+//
+//		// Gibt es die Email-Adresse bei einem anderen, bereits vorhandenen Kunden?
+//		if (vorhandenerKunde.getId().longValue() != kunde.getId().longValue()) {
+//			throw new EmailExistsException(kunde.getEmail());
+//		}
 		
 		// TODO Datenbanzugriffsschicht statt Mock
 		Mock.updateKunde(kunde);

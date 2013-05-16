@@ -86,9 +86,10 @@ public final class Mock {
 		}
 		return kunden;
 	}
+
 	
 	public static AbstractKunde findKundeByEmail(String email) {
-		if (email.startsWith("x")) {
+		if (email.startsWith("(/d)")) {
 			return null;
 		}
 		

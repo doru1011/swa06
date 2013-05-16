@@ -2,9 +2,12 @@ package de.shop.artikelverwaltung.rest;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
+import java.lang.invoke.MethodHandles;
 import java.util.List;
 import java.util.Locale;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
@@ -22,6 +25,8 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
+import org.jboss.logging.Logger;
+
 import de.shop.artikelverwaltung.domain.Artikel;
 import de.shop.artikelverwaltung.service.ArtikelService;
 import de.shop.util.LocaleHelper;
@@ -34,6 +39,7 @@ import de.shop.util.NotFoundException;
 @RequestScoped
 @Log
 public class ArtikelResource {
+	private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().lookupClass());
 	
 	@Inject
 	private LocaleHelper localeHelper;
@@ -42,7 +48,20 @@ public class ArtikelResource {
 	private HttpHeaders headers;
 	
 	@Inject
+	private UriHelperArtikel uriHelperArtikel;
+	
+	@Inject
 	private ArtikelService as;
+	
+	@PostConstruct
+	private void postConstruct() {
+		LOGGER.debugf("CDI-faehiges Bean %s wurde erzeugt", this);
+	}
+	
+	@PreDestroy
+	private void preDestroy() {
+		LOGGER.debugf("CDI-faehiges Bean %s wird geloescht", this);
+	}
 	
 	@GET
 	@Path("{id:[1-9][0-9]*}")
