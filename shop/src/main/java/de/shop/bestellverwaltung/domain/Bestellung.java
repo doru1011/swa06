@@ -59,6 +59,7 @@ public class Bestellung implements Serializable {
 	private static final long serialVersionUID = 1618359234119003714L;
 	private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().lookupClass());
 	
+	
 	private static final String PREFIX = "Bestellung.";
 	public static final String FIND_BESTELLUNGEN_BY_KUNDE = PREFIX + "findBestellungenByKunde";
 	public static final String FIND_KUNDE_BY_ID = PREFIX + "findBestellungKundeById";
