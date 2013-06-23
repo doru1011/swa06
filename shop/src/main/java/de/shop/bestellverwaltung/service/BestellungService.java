@@ -9,6 +9,7 @@ import de.shop.kundenverwaltung.domain.AbstractKunde;
 
 public interface BestellungService {
 	Bestellung findBestellungById(Long id);
+	AbstractKunde findKundeById(Long id);
 	List<Bestellung> findBestellungenByKundeId(Long kundeId);
 	Bestellung createBestellung(Bestellung bestellung, AbstractKunde kunde, 
 			List<Bestellposition> bestellpositionen, Locale locale);

@@ -2,7 +2,10 @@ package de.shop.bestellverwaltung.rest;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
+import java.lang.invoke.MethodHandles;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
@@ -17,6 +20,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+
+import org.jboss.logging.Logger;
 
 import de.shop.artikelverwaltung.domain.Artikel;
 import de.shop.artikelverwaltung.service.ArtikelService;
@@ -34,6 +39,8 @@ import de.shop.util.NotFoundException;
 @Consumes
 @Log
 public class BestellungResource {
+	private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().lookupClass());
+	
 	@Inject
 	private LocaleHelper localeHelper;
 	
@@ -60,28 +67,31 @@ public class BestellungResource {
 	
 
 	
+	/**
+	 * Mit der URL /bestellungen/{id}/kunde den Kunden einer Bestellung ermitteln
+	 * @param id ID der Bestellung
+	 * @return Objekt mit Kundendaten, falls die ID vorhanden ist
+	 */
 	@GET
-	@Path("{id:[1-9][0-9]*}")
-	public Bestellung findBestellungById(@PathParam("id") Long id) {
-		final Bestellung bestellung = bs.findBestellungById(id);
-		if (bestellung == null) {
-			throw new NotFoundException("Keine Bestellung mit der ID " + id + " gefunden.");
+	@Path("{id:[1-9][0-9]*}/kunde")
+	public AbstractKunde findKundeByBestellungId(@PathParam("id") Long id) {
+		final AbstractKunde kunde = bs.findKundeById(id);
+		if (kunde == null) {
+			final String msg = "Keine Bestellung gefunden mit der ID " + id;
+			throw new NotFoundException(msg);
 		}
-		
+
 		// URLs innerhalb der gefundenen Bestellung anpassen
-		uriHelperBestellung.updateUriBestellung(bestellung, uriInfo);
-		if (!bestellung.getBestellpositionen().isEmpty()) {
-			final List<Bestellposition> bestellpositionen = bestellung.getBestellpositionen();
-			// URLs innerhalb der gefundenen Bestellpositionen anpassen
-			for (Bestellposition bestellposition : bestellpositionen) {
-				uriHelperBestellposition.updateUriBestellposition(bestellposition, uriInfo); 
-			}
-		}
-		
-		
-		return bestellung;
+		uriHelperKunde.updateUriKunde(kunde, uriInfo);
+		return kunde;
 	}
+
 	
+	/**
+	 * Mit der URL /bestellungen eine neue Bestellung anlegen
+	 * @param bestellung die neue Bestellung
+	 * @return Objekt mit Bestelldaten, falls die ID vorhanden ist
+	 */
 	@POST
 	@Consumes(APPLICATION_JSON)
 	@Produces
@@ -98,30 +108,71 @@ public class BestellungResource {
 			throw new NotFoundException("Kein Kunde vorhanden mit der ID " + kundeIdStr, e);
 		}
 		
-		final Locale locale = localeHelper.getLocale(headers);
-		final AbstractKunde kunde = ks.findKundeById(kundeId, locale);
-		bestellung.setKunde(kunde);
-		bestellung.setAusgeliefert(false);
-		final List<Bestellposition> bestellpositionen = bestellung.getBestellpositionen();
-		//  Artikel ermitteln
+		// persistente Artikel ermitteln
+		final Collection<Bestellposition> bestellpositionen = bestellung.getBestellpositionen();
+		final List<Long> artikelIds = new ArrayList<>(bestellpositionen.size());
+		for (Bestellposition bp : bestellpositionen) {
+			final String artikelUriStr = bp.getArtikelUri().toString();
+			startPos = artikelUriStr.lastIndexOf('/') + 1;
+			final String artikelIdStr = artikelUriStr.substring(startPos);
+			Long artikelId = null;
+			try {
+				artikelId = Long.valueOf(artikelIdStr);
+			}
+			catch (NumberFormatException e) {
+				// Ungueltige Artikel-ID: wird nicht beruecksichtigt
+				continue;
+			}
+			artikelIds.add(artikelId);
+		}
 		
-				for (Bestellposition bp : bestellpositionen) {
-					final String artikelUriStr = bp.getArtikelUri().toString();
-					startPos = artikelUriStr.lastIndexOf('/') + 1;
-					final String artikelIdStr = artikelUriStr.substring(startPos);
-					Long artikelId = null;
-					try {
-						artikelId = Long.valueOf(artikelIdStr);
-						final Artikel artikel = as.findArtikelById(artikelId, locale);
-						bp.setArtikel(artikel);
-					}
-					catch (NumberFormatException e) {
-						throw new NotFoundException("Kein Artikel vorhanden mit der ID " + artikelIdStr, e);
-					}
-				}	
-				
-		bestellung = bs.createBestellung(bestellung, kunde, bestellpositionen, locale);
+		if (artikelIds.isEmpty()) {
+			// keine einzige gueltige Artikel-ID
+			final StringBuilder sb = new StringBuilder("Keine Artikel vorhanden mit den IDs: ");
+			for (Bestellposition bp : bestellpositionen) {
+				final String artikelUriStr = bp.getArtikelUri().toString();
+				startPos = artikelUriStr.lastIndexOf('/') + 1;
+				sb.append(artikelUriStr.substring(startPos));
+				sb.append(' ');
+			}
+			throw new NotFoundException(sb.toString());
+		}
+
+		final Collection<Artikel> gefundeneArtikel = as.findArtikelByIds(artikelIds);
+		if (gefundeneArtikel.isEmpty()) {
+			throw new NotFoundException("Keine Artikel vorhanden mit den IDs: " + artikelIds);
+		}
+		
+		// Bestellpositionen haben URLs fuer persistente Artikel.
+		// Diese persistenten Artikel wurden in einem DB-Zugriff ermittelt (s.o.)
+		// Fuer jede Bestellposition wird der Artikel passend zur Artikel-URL bzw. Artikel-ID gesetzt.
+		// Bestellpositionen mit nicht-gefundene Artikel werden eliminiert.
+		int i = 0;
+		final List<Bestellposition> neueBestellpositionen = new ArrayList<>(bestellpositionen.size());
+		for (Bestellposition bp : bestellpositionen) {
+			// Artikel-ID der aktuellen Bestellposition (s.o.):
+			// artikelIds haben gleiche Reihenfolge wie bestellpositionen
+			final long artikelId = artikelIds.get(i++);
+			
+			// Wurde der Artikel beim DB-Zugriff gefunden?
+			for (Artikel artikel : gefundeneArtikel) {
+				if (artikel.getId().longValue() == artikelId) {
+					// Der Artikel wurde gefunden
+					bp.setArtikel(artikel);
+					neueBestellpositionen.add(bp);
+					break;					
+				}
+			}
+		}
+		bestellung.setBestellpositionen(neueBestellpositionen);
+		
+		final Locale locale = localeHelper.getLocale(headers);
+		bestellung = bs.createBestellung(bestellung, kundeId, locale);
+
 		final URI bestellungUri = uriHelperBestellung.getUriBestellung(bestellung, uriInfo);
-		return Response.created(bestellungUri).build();
+		final Response response = Response.created(bestellungUri).build();
+		LOGGER.fatal(bestellungUri.toString());
+		
+		return response;
 	}
 }
