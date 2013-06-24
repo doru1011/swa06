@@ -8,7 +8,7 @@
 -- Beim ALLERERSTEN Aufruf die Zeilen mit "DROP TABLE ..." durch -- auskommentieren
 -- ===============================================================================
 
---DROP TABLE hobby;
+DROP TABLE hobby;
 CREATE TABLE hobby(id NUMBER(1) NOT NULL PRIMARY KEY, txt VARCHAR2(16) NOT NULL UNIQUE) CACHE;
 INSERT INTO hobby VALUES (0, 'SPORT');
 INSERT INTO hobby VALUES (1, 'LESEN');
