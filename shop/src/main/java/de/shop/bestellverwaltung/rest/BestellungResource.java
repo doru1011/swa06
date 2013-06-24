@@ -19,7 +19,6 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
@@ -31,15 +30,14 @@ import de.shop.artikelverwaltung.domain.Artikel;
 import de.shop.artikelverwaltung.service.ArtikelService;
 import de.shop.bestellverwaltung.domain.Bestellposition;
 import de.shop.bestellverwaltung.domain.Bestellung;
-import de.shop.bestellverwaltung.domain.Lieferung;
 import de.shop.bestellverwaltung.service.BestellungService;
 import de.shop.kundenverwaltung.domain.AbstractKunde;
 import de.shop.kundenverwaltung.rest.UriHelperKunde;
+import de.shop.kundenverwaltung.service.KundeService;
 import de.shop.util.LocaleHelper;
 import de.shop.util.Log;
 import de.shop.util.NotFoundException;
 import de.shop.util.Transactional;
-
 
 @Path("/bestellungen")
 @Produces(APPLICATION_JSON)
@@ -49,27 +47,6 @@ import de.shop.util.Transactional;
 @Log
 public class BestellungResource {
 	private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().lookupClass());
-
-	@Context
-	private UriInfo uriInfo;
-	
-	@Context
-	private HttpHeaders headers;
-	
-	@Inject
-	private BestellungService bs;
-	
-	@Inject
-	private ArtikelService as;
-	
-	@Inject
-	private UriHelperBestellung uriHelperBestellung;
-	
-	@Inject
-	private UriHelperKunde uriHelperKunde;
-	
-	@Inject
-	private LocaleHelper localeHelper;
 	
 	@PostConstruct
 	private void postConstruct() {
@@ -81,57 +58,57 @@ public class BestellungResource {
 		LOGGER.debugf("CDI-faehiges Bean %s wird geloescht", this);
 	}
 	
-	/**
-	 * Mit der URL /bestellungen/{id} eine Bestellung ermitteln
-	 * @param id ID der Bestellung
-	 * @return Objekt mit Bestelldaten, falls die ID vorhanden ist
-	 */
+	@Inject
+	private LocaleHelper localeHelper;
+	
+	@Context
+	private HttpHeaders headers;
+	
+	@Context
+	private UriInfo uriInfo;
+	
+	@Inject
+	private UriHelperBestellung uriHelperBestellung;
+	
+	@Inject
+	private UriHelperBestellposition uriHelperBestellposition;
+	
+	@Inject
+	private UriHelperKunde uriHelperKunde;
+	
+	@Inject
+	private BestellungService bs;
+	
+	@Inject
+	private KundeService ks;
+	
+	@Inject
+	private ArtikelService as;
+	
+
+	
 	@GET
 	@Path("{id:[1-9][0-9]*}")
 	public Bestellung findBestellungById(@PathParam("id") Long id) {
 		final Bestellung bestellung = bs.findBestellungById(id);
 		if (bestellung == null) {
-			final String msg = "Keine Bestellung gefunden mit der ID " + id;
-			throw new NotFoundException(msg);
+			throw new NotFoundException("Keine Bestellung mit der ID " + id + " gefunden.");
 		}
-
+		
 		// URLs innerhalb der gefundenen Bestellung anpassen
 		uriHelperBestellung.updateUriBestellung(bestellung, uriInfo);
+		if (!bestellung.getBestellpositionen().isEmpty()) {
+			final List<Bestellposition> bestellpositionen = bestellung.getBestellpositionen();
+			// URLs innerhalb der gefundenen Bestellpositionen anpassen
+			for (Bestellposition bestellposition : bestellpositionen) {
+				uriHelperBestellposition.updateUriBestellposition(bestellposition, uriInfo); 
+			}
+		}
+		
+		
 		return bestellung;
 	}
 	
-	/**
-	 * Mit der URL /bestellungen/{id}/lieferungen die Lieferung ermitteln
-	 * zu einer bestimmten Bestellung ermitteln
-	 * @param id ID der Bestellung
-	 * @return Objekt mit Lieferdaten, falls die ID vorhanden ist
-	 */
-	@GET
-	@Path("{id:[1-9][0-9]*}/lieferungen")
-	public Collection<Lieferung> findLieferungenByBestellungId(@PathParam("id") Long id) {
-		// Diese Methode ist bewusst NICHT implementiert, um zu zeigen,
-		// wie man Methodensignaturen an der Schnittstelle fuer andere
-		// Teammitglieder schon mal bereitstellt, indem einfach "null"
-		// zurueckgeliefert oder eine Exception geworfen wird oder...
-		// Die Kollegen koennen nun weiterarbeiten, waehrend man selbst
-		// gerade keine Zeit hat, weil andere Aufgaben Vorrang haben.
-		
-		final String errorMsg = "findLieferungenByBestellungId: NOT YET IMPLEMENTED"; 
-		LOGGER.fatal(errorMsg);
-		final Response response = Response.serverError()
-	                                      .entity(errorMsg)
-	                                      .build();
-		throw new WebApplicationException(response);
-		
-		// TODO findLieferungenByBestellungId noch nicht implementiert
-	}
-
-	
-	/**
-	 * Mit der URL /bestellungen/{id}/kunde den Kunden einer Bestellung ermitteln
-	 * @param id ID der Bestellung
-	 * @return Objekt mit Kundendaten, falls die ID vorhanden ist
-	 */
 	@GET
 	@Path("{id:[1-9][0-9]*}/kunde")
 	public AbstractKunde findKundeByBestellungId(@PathParam("id") Long id) {
@@ -145,13 +122,8 @@ public class BestellungResource {
 		uriHelperKunde.updateUriKunde(kunde, uriInfo);
 		return kunde;
 	}
-
 	
-	/**
-	 * Mit der URL /bestellungen eine neue Bestellung anlegen
-	 * @param bestellung die neue Bestellung
-	 * @return Objekt mit Bestelldaten, falls die ID vorhanden ist
-	 */
+	
 	@POST
 	@Consumes(APPLICATION_JSON)
 	@Produces
