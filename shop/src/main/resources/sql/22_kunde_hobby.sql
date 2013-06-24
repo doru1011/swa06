@@ -4,9 +4,9 @@
 -- ===============================================================================
 
 
-INSERT INTO kunde_hobby (kunde_fk, hobby_fk) VALUES (101,0);
-INSERT INTO kunde_hobby (kunde_fk, hobby_fk) VALUES (101,1);
-INSERT INTO kunde_hobby (kunde_fk, hobby_fk) VALUES (102,0);
-INSERT INTO kunde_hobby (kunde_fk, hobby_fk) VALUES (102,2);
-INSERT INTO kunde_hobby (kunde_fk, hobby_fk) VALUES (105,1);
-INSERT INTO kunde_hobby (kunde_fk, hobby_fk) VALUES (105,2);
+INSERT INTO kunde_hobby (kunde_fk, hobby_fk) VALUES (2,0);
+INSERT INTO kunde_hobby (kunde_fk, hobby_fk) VALUES (2,1);
+INSERT INTO kunde_hobby (kunde_fk, hobby_fk) VALUES (3,0);
+INSERT INTO kunde_hobby (kunde_fk, hobby_fk) VALUES (3,2);
+INSERT INTO kunde_hobby (kunde_fk, hobby_fk) VALUES (6,1);
+INSERT INTO kunde_hobby (kunde_fk, hobby_fk) VALUES (6,2);
