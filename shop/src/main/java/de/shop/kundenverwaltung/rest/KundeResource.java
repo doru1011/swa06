@@ -165,6 +165,7 @@ public class KundeResource {
 	@POST
 	@Consumes(APPLICATION_JSON)
 	@Produces
+	@Transactional
 	public Response createKunde(AbstractKunde kunde) {
 		final Locale locale = localeHelper.getLocale(headers);
 
@@ -190,6 +191,7 @@ public class KundeResource {
 	@PUT
 	@Consumes(APPLICATION_JSON)
 	@Produces
+	@Transactional
 	public void updateKunde(AbstractKunde kunde) {
 		// Vorhandenen Kunden ermitteln
 		final Adresse adresse = kunde.getAdresse();

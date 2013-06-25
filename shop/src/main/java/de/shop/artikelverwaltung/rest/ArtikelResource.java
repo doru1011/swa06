@@ -1,6 +1,4 @@
 package de.shop.artikelverwaltung.rest;
-import static de.shop.util.Constants.MIN_ID;
-
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
 import java.lang.invoke.MethodHandles;
